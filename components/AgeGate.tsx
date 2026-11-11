@@ -21,6 +21,8 @@ export function AgeGate() {
   useEffect(() => {
     const open = state === "ask" || state === "under";
     document.body.style.overflow = open ? "hidden" : "";
+    // "ready" starts the hero animation once the gate is out of the way
+    document.documentElement.classList.toggle("ready", state === "ok");
     return () => {
       document.body.style.overflow = "";
     };
@@ -42,41 +44,39 @@ export function AgeGate() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="age-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-usiku/95 p-5 backdrop-blur"
+      className="night fixed inset-0 z-50 flex items-center justify-center p-5"
     >
-      <div className="flex w-full max-w-sm flex-col items-center gap-5 rounded-3xl border border-plum-line bg-plum p-8 text-center">
-        <LogoMark size={56} />
+      <div className="paper flex w-full max-w-md -rotate-1 flex-col items-start gap-5 rounded-xl border-2 border-usiku p-8 shadow-[8px_8px_0_var(--color-sukuma)]">
+        <LogoMark size={52} />
         {state === "ask" ? (
           <>
-            <h2 id="age-title" className="text-3xl font-extrabold">
+            <p className="hand text-2xl text-pilipili">before you come in</p>
+            <h2 id="age-title" className="sign text-6xl">
               Uko na miaka 18?
             </h2>
-            <p className="text-sm text-muted">
-              Tukate is about meeting up for drinks, so it is for adults only. Are you 18 or
+            <p>
+              Tukate is about meeting up for a drink, so it is strictly for adults. Are you 18 or
               older?
             </p>
             <div className="flex w-full flex-col gap-3">
-              <button type="button" onClick={confirm} className="btn btn-primary w-full">
+              <button type="button" onClick={confirm} className="press press-green w-full">
                 Yes, I am 18 or older
               </button>
-              <button
-                type="button"
-                onClick={() => setState("under")}
-                className="btn btn-ghost w-full"
-              >
-                No, I am under 18
+              <button type="button" onClick={() => setState("under")} className="press press-cream w-full">
+                No, not yet
               </button>
             </div>
           </>
         ) : (
           <>
-            <h2 id="age-title" className="text-3xl font-extrabold">
+            <h2 id="age-title" className="sign text-6xl">
               Bado kidogo.
             </h2>
-            <p className="text-sm text-muted">
-              Tukate is only for people aged 18 and over. Come back when you are.
+            <p>
+              Tukate is only for people aged 18 and over. Come back when you are, and the first
+              soda is on us in spirit.
             </p>
-            <button type="button" onClick={() => setState("ask")} className="btn btn-ghost w-full">
+            <button type="button" onClick={() => setState("ask")} className="press press-cream w-full">
               I tapped the wrong button
             </button>
           </>

@@ -4,43 +4,43 @@ import { VenueForm } from "@/components/VenueForm";
 
 export const metadata: Metadata = {
   title: "For venues",
-  description: "List your bar, rooftop or lounge as a Tukate meetup spot.",
+  description: "List your bar, rooftop or lounge as a place where Tukate matches meet.",
 };
-
-const reasons = [
-  {
-    title: "New faces through the door",
-    body: "Tukate matches need somewhere public to meet. Your venue can be where they go.",
-  },
-  {
-    title: "A safer first meetup",
-    body: "Every Tukate meetup happens in public. Venues that look after their guests are the heart of that.",
-  },
-  {
-    title: "Simple to join",
-    body: "Tell us about your venue below and we will get in touch.",
-  },
-];
 
 export default function Venues() {
   return (
-    <>
-      <PageHeader
-        eyebrow="For venues"
-        title="Be where the cheers happens."
-        lede="Run a bar, rooftop, lounge or restaurant in Nairobi? List it as a Tukate meetup spot."
-      />
-      <section className="container-x grid gap-10 pb-20 lg:grid-cols-2">
-        <div className="flex flex-col gap-5">
-          {reasons.map((reason) => (
-            <div key={reason.title} className="flex flex-col gap-1.5 border-l-4 border-sukuma pl-5">
-              <h2 className="text-2xl font-extrabold">{reason.title}</h2>
-              <p className="max-w-[55ch] text-sm leading-relaxed text-muted">{reason.body}</p>
-            </div>
-          ))}
+    <div className="paper">
+      <PageHeader note="for bars, rooftops, lounges and locals" title="Be where the first round gets bought.">
+        <p>
+          Every Tukate match ends the same way: two people who have just met need somewhere public
+          to sit down, and they would like it to be good. We keep a list of those places. If you
+          run one in Nairobi, we would like yours on it.
+        </p>
+      </PageHeader>
+      <section className="wrap grid gap-14 pb-28 lg:grid-cols-[1fr_1.05fr]">
+        <div className="prose-tk flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <h2 className="head text-3xl">What you get</h2>
+            <p>
+              New faces through the door, in pairs for now and in whole crews once Mbogi Mode
+              arrives. They come with a reason to stay for more than one.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="head text-3xl">What we ask</h2>
+            <p>
+              That you look after people. Tukate only works if a first meetup feels safe, so we
+              care about staff who notice things, decent lighting, and a door that will call
+              someone a cab.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="head text-3xl">What happens next</h2>
+            <p>Fill in the form and one of us will call you. That is the whole process for now.</p>
+          </div>
         </div>
         <VenueForm />
       </section>
-    </>
+    </div>
   );
 }

@@ -1,19 +1,9 @@
-export function PageHeader({
-  eyebrow,
-  title,
-  lede,
-}: {
-  eyebrow: string;
-  title: string;
-  lede?: string;
-}) {
+export function PageHeader({ note, title, children }: { note: string; title: string; children?: React.ReactNode }) {
   return (
-    <section className="container-x flex flex-col gap-4 pb-10 pt-14 md:pt-20">
-      <p className="eyebrow">{eyebrow}</p>
-      <h1 className="max-w-3xl text-5xl font-extrabold leading-[1] tracking-tight sm:text-6xl">
-        {title}
-      </h1>
-      {lede ? <p className="max-w-xl text-lg text-muted">{lede}</p> : null}
+    <section className="wrap flex flex-col gap-5 pb-12 pt-14 md:pt-20">
+      <p className="hand text-3xl text-pilipili">{note}</p>
+      <h1 className="sign max-w-5xl text-[clamp(3.4rem,11vw,8.5rem)]">{title}</h1>
+      {children ? <div className="prose-tk flex flex-col gap-4">{children}</div> : null}
     </section>
   );
 }

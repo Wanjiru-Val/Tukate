@@ -5,7 +5,8 @@ import { useState } from "react";
 type Status = "idle" | "sending" | "sent" | "error";
 
 const field =
-  "w-full rounded-xl border-2 border-plum-line bg-usiku px-4 py-3 text-base text-cream placeholder:text-muted/60 focus:border-sukuma focus:outline-none";
+  "w-full rounded-lg border-2 border-usiku bg-white px-4 py-3 text-lg text-usiku placeholder:text-usiku/35 focus:shadow-[4px_4px_0_var(--color-sukuma)] focus:outline-none";
+const label = "flex flex-col gap-1.5 font-semibold";
 
 export function VenueForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -24,7 +25,7 @@ export function VenueForm() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(body.error ?? "Something went wrong. Please try again.");
+        setError(body.error ?? "Something went wrong on our side. Please try again.");
         setStatus("error");
         return;
       }
@@ -37,51 +38,42 @@ export function VenueForm() {
 
   if (status === "sent") {
     return (
-      <div className="card flex flex-col gap-2" role="status">
-        <h2 className="text-2xl font-extrabold text-sukuma">Asante! We got it.</h2>
-        <p className="text-sm text-muted">We will be in touch about listing your venue.</p>
+      <div role="status" className="flex flex-col gap-3 rounded-xl border-2 border-usiku bg-sukuma p-8 shadow-[8px_8px_0_var(--color-usiku)]">
+        <h2 className="sign text-6xl">Asante!</h2>
+        <p className="text-lg">We have your details and will be in touch about listing your venue.</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="card flex flex-col gap-4" noValidate={false}>
-      <label className="flex flex-col gap-1.5 text-sm font-semibold" htmlFor="venue-name">
-        Venue name
-        <input id="venue-name" name="venue" required maxLength={120} className={field} placeholder="e.g. Rooftop 254" />
+    <form onSubmit={onSubmit} className="flex flex-col gap-5 rounded-xl border-2 border-usiku bg-mango p-6 shadow-[8px_8px_0_var(--color-usiku)] sm:p-8">
+      <label className={label} htmlFor="venue-name">
+        What is the place called?
+        <input id="venue-name" name="venue" required maxLength={120} className={field} />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm font-semibold" htmlFor="venue-area">
-        Area
-        <input id="venue-area" name="area" required maxLength={80} className={field} placeholder="e.g. Westlands" />
+      <label className={label} htmlFor="venue-area">
+        Which part of town?
+        <input id="venue-area" name="area" required maxLength={80} className={field} placeholder="Westlands, Kilimani…" />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm font-semibold" htmlFor="venue-contact">
-        Your name
+      <label className={label} htmlFor="venue-contact">
+        And your name?
         <input id="venue-contact" name="contact" required maxLength={120} className={field} />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm font-semibold" htmlFor="venue-phone">
-        Phone number
-        <input
-          id="venue-phone"
-          name="phone"
-          type="tel"
-          required
-          maxLength={20}
-          inputMode="tel"
-          className={field}
-          placeholder="+254 7XX XXX XXX"
-        />
+      <label className={label} htmlFor="venue-phone">
+        A number we can reach you on
+        <input id="venue-phone" name="phone" type="tel" required maxLength={20} inputMode="tel" className={field} placeholder="+254 7XX XXX XXX" />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm font-semibold" htmlFor="venue-notes">
-        Anything else? (optional)
+      <label className={label} htmlFor="venue-notes">
+        Anything we should know? (optional)
         <textarea id="venue-notes" name="notes" rows={3} maxLength={1000} className={field} />
       </label>
       {status === "error" ? (
-        <p role="alert" className="text-sm font-semibold text-pilipili">
+        <p role="alert" className="rounded-lg border-2 border-usiku bg-cream px-4 py-3 font-semibold">
           {error}
         </p>
       ) : null}
-      <button type="submit" disabled={status === "sending"} className="btn btn-primary disabled:opacity-60">
-        {status === "sending" ? "Sending…" : "Send"}
+      <button type="submit" disabled={status === "sending"} className="press press-green self-start disabled:opacity-60">
+        {status === "sending" ? "Sending…" : "Send it over"}
       </button>
     </form>
   );

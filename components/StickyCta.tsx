@@ -4,10 +4,10 @@ import Link from "next/link";
 export function StickyCta() {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-plum-line/60 bg-usiku/95 px-5 pt-3 backdrop-blur md:hidden"
-      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
+      className="on-dark fixed inset-x-0 bottom-0 z-30 border-t-2 border-plum-line bg-usiku px-5 pt-3 sm:hidden"
+      style={{ paddingBottom: "max(14px, env(safe-area-inset-bottom))" }}
     >
-      <Link href="/download" className="btn btn-primary w-full">
+      <Link href="/download" className="press press-green w-full">
         Get the app
       </Link>
     </div>

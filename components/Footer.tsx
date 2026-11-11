@@ -4,34 +4,32 @@ import { nav, site } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-plum-line/60 bg-usiku pb-24 pt-12 md:pb-12">
-      <div className="container-x flex flex-col gap-10">
-        <div className="flex flex-col justify-between gap-8 md:flex-row">
-          <div className="flex max-w-xs flex-col gap-3">
-            <Logo size={28} />
-            <p className="text-sm text-muted">
-              {site.slogan}. {site.tagline}
+    <footer className="night border-t-2 border-plum-line pb-28 pt-14 md:pb-14">
+      <div className="wrap flex flex-col gap-10">
+        <div className="flex flex-col justify-between gap-10 md:flex-row">
+          <div className="flex max-w-sm flex-col gap-4">
+            <Logo size={30} />
+            <p className="text-cream/70">
+              Made in Nairobi by people who have also been left on read at 5:47 on a Friday.
             </p>
           </div>
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm">
+          <nav aria-label="Footer" className="flex flex-col gap-2 text-lg">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="text-muted hover:text-cream">
+              <Link key={item.href} href={item.href} className="hover:text-mango">
                 {item.label}
               </Link>
             ))}
-            <Link href="/download" className="text-muted hover:text-cream">
+            <Link href="/download" className="hover:text-mango">
               Get the app
             </Link>
           </nav>
         </div>
-        <p className="rounded-2xl bg-plum px-5 py-4 text-sm text-cream">
-          <strong className="text-mango">18+ only.</strong> Drink responsibly. Never drink and
-          drive. Need to talk to someone? Call the {site.helpline.name} on{" "}
-          <strong>{site.helpline.number}</strong>.
+        <p className="max-w-3xl border-l-4 border-pilipili pl-5 text-cream/85">
+          Tukate is for people aged 18 and over. Please drink responsibly, and never drink and
+          drive. If drinking has stopped being fun for you or for someone close to you, the{" "}
+          {site.helpline.name} is free to call on <strong>{site.helpline.number}</strong>.
         </p>
-        <p className="text-xs text-muted">
-          © {new Date().getFullYear()} Tukate. Made in Nairobi.
-        </p>
+        <p className="text-sm text-cream/50">© {new Date().getFullYear()} Tukate</p>
       </div>
     </footer>
   );
