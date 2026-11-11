@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "./Logo";
 
 const KEY = "tukate-age-confirmed";
@@ -18,13 +18,24 @@ export function AgeGate() {
     setState(confirmed ? "ok" : "ask");
   }, []);
 
+  const dialog = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const open = state === "ask" || state === "under";
     document.body.style.overflow = open ? "hidden" : "";
+    // While the gate is up, the page behind it cannot be tabbed to or clicked.
+    const behind = document.querySelectorAll<HTMLElement>("body > header, body > main, body > footer, body > aside");
+    behind.forEach((el) => {
+      el.inert = open;
+    });
+    if (open) dialog.current?.querySelector<HTMLElement>("button")?.focus();
     // "ready" starts the hero animation once the gate is out of the way
     document.documentElement.classList.toggle("ready", state === "ok");
     return () => {
       document.body.style.overflow = "";
+      behind.forEach((el) => {
+        el.inert = false;
+      });
     };
   }, [state]);
 
@@ -41,6 +52,7 @@ export function AgeGate() {
 
   return (
     <div
+      ref={dialog}
       role="dialog"
       aria-modal="true"
       aria-labelledby="age-title"

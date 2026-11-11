@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { nav } from "@/lib/site";
+import { MobileMenu } from "./MobileMenu";
 
 export function Nav() {
   return (
@@ -40,24 +41,7 @@ export function Nav() {
               Get the app
             </Link>
           </span>
-          <details className="relative lg:hidden">
-            <summary
-              className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg border-2 border-cream px-3 font-semibold [&::-webkit-details-marker]:hidden"
-              aria-label="Menu"
-            >
-              Menu
-            </summary>
-            <nav
-              aria-label="Mobile"
-              className="absolute right-0 top-13 flex w-60 flex-col rounded-xl border-2 border-usiku bg-cream p-2 text-usiku shadow-[6px_6px_0_var(--color-sukuma)]"
-            >
-              {nav.map((item) => (
-                <Link key={item.href} href={item.href} className="rounded-lg px-4 py-3 text-lg font-semibold hover:bg-mango">
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </details>
+          <MobileMenu />
         </div>
       </div>
     </header>

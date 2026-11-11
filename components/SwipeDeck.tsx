@@ -24,7 +24,7 @@ function Card({ person }: { person: Person }) {
         </p>
         <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>
           <span>Base: {person.base}</span>
-          <span className="text-pilipili">Kinywaji: {person.drink}</span>
+          <span className="text-cup-ridge">Kinywaji: {person.drink}</span>
         </p>
         <p className="text-[0.95rem] leading-snug text-usiku/80">{person.bio}</p>
       </div>

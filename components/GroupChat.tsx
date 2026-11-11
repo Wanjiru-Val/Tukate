@@ -30,7 +30,7 @@ export function GroupChat() {
               }`}
               style={{ ["--d" as string]: delay }}
             >
-              {!mine && <span className="text-xs font-bold text-pilipili">{msg.from}</span>}
+              {!mine && <span className="text-xs font-bold text-cup-ridge">{msg.from}</span>}
               {"typing" in msg ? (
                 <span className="typing flex items-center gap-1 py-1.5 text-usiku" aria-label="typing">
                   <i />
@@ -40,7 +40,7 @@ export function GroupChat() {
               ) : (
                 <>
                   <span>{msg.text}</span>
-                  <span className="self-end text-[10px] text-usiku/50">{msg.time}</span>
+                  <span className="self-end text-[10px] text-usiku/75">{msg.time}</span>
                 </>
               )}
             </div>
