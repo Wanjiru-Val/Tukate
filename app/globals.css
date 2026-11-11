@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* Bendera Remix palette (see docs/brand-decisions.md) */
+@theme {
+  --color-usiku: #121018;
+  --color-plum: #241f2e;
+  --color-plum-line: #3a3348;
+  --color-sukuma: #00d26a;
+  --color-pilipili: #ff4141;
+  --color-cream: #fff8ee;
+  --color-mango: #ffc21a;
+  --color-pink: #ff4fa3;
+  --color-cup: #ff3b3b;
+  --color-cup-ridge: #c92424;
+  --color-muted: #b9b2c6;
+  --font-display: var(--font-bricolage), "Arial Black", system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-usiku);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-mango);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-bold transition-transform hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-primary {
+    @apply bg-sukuma text-usiku;
+  }
+  .btn-ghost {
+    @apply border-2 border-cream/70 text-cream;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-mango;
+  }
+  .card {
+    @apply rounded-3xl bg-plum p-6;
+  }
+}
