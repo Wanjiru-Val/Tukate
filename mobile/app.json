@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "Tukate",
+    "slug": "tukate",
+    "scheme": "tukate",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "ke.co.tukate.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Tukate uses your location to show people near you and to let you share where you are with a friend.",
+        "NSPhotoLibraryUsageDescription": "Tukate needs your photos so you can choose a profile picture."
+      }
+    },
+    "android": {
+      "package": "ke.co.tukate.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#121018",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Tukate uses your location to show people near you and to let you share where you are with a friend."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Tukate needs your photos so you can choose a profile picture."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
