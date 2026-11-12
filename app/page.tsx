@@ -7,7 +7,8 @@ import { Sunset } from "@/components/Sunset";
 import { Cups } from "@/components/Cups";
 import { HouseRules } from "@/components/HouseRules";
 import { Questions } from "@/components/Questions";
-import { counterQuestions, night } from "@/lib/content";
+import { counterQuestions, freeTab, night, plusTab } from "@/lib/content";
+import { site } from "@/lib/site";
 
 export default function Home() {
   return (
@@ -67,6 +68,15 @@ export default function Home() {
                 Swipe right if you would happily share a table with them. Pass if you would not,
                 and they will never know. If you are really sure, there is a{" "}
                 <strong>Super Like</strong>, which is the app equivalent of waving across the bar.
+              </p>
+              <p>
+                You get {site.plan.freeSwipesPerDay} swipes a day for free, on whoever is in the
+                area you are in. If you would rather only see fellow whisky people, or people whose
+                idea of a night out matches yours, that is what{" "}
+                <a href="#bei" className="link-tk">
+                  {site.plan.name}
+                </a>{" "}
+                is for.
               </p>
             </div>
           </div>
@@ -129,6 +139,60 @@ export default function Home() {
             </Link>
             .
           </p>
+        </div>
+      </section>
+
+      {/* Free and paid, written up as a bar tab */}
+      <section id="bei" className="night pb-28">
+        <div className="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.05fr]">
+          <div className="flex flex-col gap-6" data-reveal>
+            <p className="hand text-4xl text-mango">the bill, before you ask</p>
+            <h2 className="head text-5xl sm:text-6xl">Free gets you out of the house. {site.plan.currency} {site.plan.price} lets you be picky.</h2>
+            <div className="prose-tk flex flex-col gap-4 text-cream/85">
+              <p>
+                Tukate is free to use. You get {site.plan.freeSwipesPerDay} swipes a day on people
+                in the area you are in, and every match can chat and meet up exactly the same way.
+              </p>
+              <p>
+                {site.plan.name} is for people who know what they like. A whisky drinker can choose
+                to see only whisky drinkers. You can filter by drinking type and by party style
+                too, so a quiet-pint person is not matched with someone planning to close the club.
+                It costs {site.plan.currency} {site.plan.price} a month, which in this town is
+                roughly one drink.
+              </p>
+            </div>
+          </div>
+          <div className="paper rotate-1 rounded-sm border-2 border-usiku px-6 py-8 shadow-[10px_10px_0_var(--color-sukuma)] sm:px-10" data-reveal style={{ fontFamily: "var(--font-ui)" }}>
+            <p className="sign text-center text-5xl" style={{ fontFamily: "var(--font-display)" }}>Bill</p>
+            <p className="hand text-center text-2xl text-cup-ridge">table for two, Friday</p>
+            <div className="mt-6 flex flex-col gap-2 border-t-2 border-dashed border-usiku/50 pt-5">
+              <p className="flex items-baseline justify-between text-lg font-bold">
+                <span>Free</span>
+                <span className="tabular-nums">{site.plan.currency} 0</span>
+              </p>
+              <ul className="flex flex-col gap-1 text-[0.95rem] text-usiku/80">
+                {freeTab.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-5 flex flex-col gap-2 border-t-2 border-dashed border-usiku/50 pt-5">
+              <p className="flex items-baseline justify-between text-lg font-bold">
+                <span>{site.plan.name}</span>
+                <span className="tabular-nums">
+                  {site.plan.currency} {site.plan.price} <span className="text-sm font-semibold">a month</span>
+                </span>
+              </p>
+              <ul className="flex flex-col gap-1 text-[0.95rem] text-usiku/80">
+                {plusTab.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <p className="mt-6 border-t-2 border-dashed border-usiku/50 pt-4 text-sm text-usiku/75">
+              You upgrade inside the app, once it is out. Nothing is charged on this website.
+            </p>
+          </div>
         </div>
       </section>
 

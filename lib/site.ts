@@ -10,6 +10,8 @@ export const site = {
   playStoreUrl: "",
   // Areas the launch is planned for. Edit freely.
   areas: ["Kilimani", "Westlands", "Kileleshwa", "the CBD"],
+  // Paid tier. "Tukate Plus" is a working name until the real one is chosen.
+  plan: { name: "Tukate Plus", price: 299, currency: "KES", freeSwipesPerDay: 3 },
   helpline: { name: "NACADA helpline", number: "1192" },
 };
 

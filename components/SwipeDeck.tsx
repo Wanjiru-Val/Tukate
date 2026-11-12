@@ -3,8 +3,20 @@
 import { useRef, useState } from "react";
 import { people, type Person } from "@/lib/content";
 import { Drink } from "./Drinks";
+import { site } from "@/lib/site";
 
 const THRESHOLD = 100;
+const FREE = site.plan.freeSwipesPerDay;
+const filters = ["Same Kinywaji", "Same drinking type", "Same party style"];
+
+function Lock() {
+  return (
+    <svg width="12" height="13" viewBox="0 0 12 13" aria-hidden="true">
+      <rect x="1" y="5.5" width="10" height="7" rx="1.5" fill="currentColor" />
+      <path d="M3.5 5.5V4a2.5 2.5 0 0 1 5 0v1.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
 
 function Card({ person }: { person: Person }) {
   return (
@@ -37,19 +49,24 @@ export function SwipeDeck() {
   const [drag, setDrag] = useState({ x: 0, y: 0, active: false });
   const [leaving, setLeaving] = useState<null | "left" | "right">(null);
   const [match, setMatch] = useState<Person | null>(null);
+  const [swipes, setSwipes] = useState(0);
   const hasMatched = useRef(false);
   const origin = useRef({ x: 0, y: 0 });
 
   const person = people[index % people.length];
   const behind = people[(index + 1) % people.length];
 
+  const left = Math.max(0, FREE - swipes);
+  const outOfSwipes = left === 0 && !match;
+
   function decide(direction: "left" | "right") {
-    if (leaving || match) return;
+    if (leaving || match || left === 0) return;
     setLeaving(direction);
     window.setTimeout(() => {
       setLeaving(null);
       setDrag({ x: 0, y: 0, active: false });
       setIndex((v) => v + 1);
+      setSwipes((v) => v + 1);
       if (direction === "right" && !hasMatched.current) {
         hasMatched.current = true;
         setMatch(person);
@@ -58,7 +75,7 @@ export function SwipeDeck() {
   }
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (leaving || match) return;
+    if (leaving || match || left === 0) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     origin.current = { x: e.clientX, y: e.clientY };
     setDrag({ x: 0, y: 0, active: true });
@@ -81,6 +98,25 @@ export function SwipeDeck() {
 
   return (
     <div className="flex w-full max-w-[21rem] flex-col gap-5">
+      <div className="flex flex-col gap-2" style={{ fontFamily: "var(--font-ui)" }}>
+        <ul className="flex flex-wrap gap-2" aria-label={`Filters, part of ${site.plan.name}`}>
+          {filters.map((f) => (
+            <li
+              key={f}
+              className="flex items-center gap-1.5 rounded-md border-2 border-dashed border-usiku/50 px-2 py-1 text-xs font-semibold text-usiku/70"
+            >
+              <Lock />
+              {f}
+            </li>
+          ))}
+        </ul>
+        <p className="flex items-baseline justify-between gap-3 text-xs font-semibold text-usiku/75">
+          <span>Filters come with {site.plan.name}</span>
+          <span aria-live="polite" className="whitespace-nowrap">
+            {left} of {FREE} free swipes left today
+          </span>
+        </p>
+      </div>
       <div className="relative aspect-[3/4.1] w-full select-none">
         {/* card behind */}
         <div
@@ -144,16 +180,42 @@ export function SwipeDeck() {
             </div>
           </div>
         )}
+        {outOfSwipes && (
+          <div
+            role="status"
+            className="absolute inset-0 flex flex-col items-start justify-center gap-4 rounded-2xl border-2 border-usiku bg-mango p-6 text-usiku shadow-[8px_8px_0_var(--color-usiku)]"
+          >
+            <p className="hand text-3xl">that was swipe number {FREE}</p>
+            <p className="sign text-6xl">
+              Kesho
+              <br />
+              tena.
+            </p>
+            <p className="text-[0.95rem]">
+              Free gives you {FREE} swipes a day. {site.plan.name} is {site.plan.currency}{" "}
+              {site.plan.price} a month: swipe as much as you like, and choose to see only people
+              with your drink, your drinking type and your party style.
+            </p>
+            <div className="flex flex-col gap-3 pt-1">
+              <a href="#bei" className="press press-cream">
+                See free and {site.plan.name}
+              </a>
+              <button type="button" className="link-tk self-start" onClick={() => setSwipes(0)}>
+                Start the demo again
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between gap-3">
-        <button type="button" className="press press-cream flex-1" onClick={() => decide("left")}>
+        <button type="button" disabled={left === 0} className="press press-cream flex-1 disabled:opacity-50" onClick={() => decide("left")}>
           Pass
         </button>
-        <button type="button" className="press press-red !px-3" onClick={() => decide("right")}>
+        <button type="button" disabled={left === 0} className="press press-red !px-3 disabled:opacity-50" onClick={() => decide("right")}>
           Super Like
         </button>
-        <button type="button" className="press press-green flex-1" onClick={() => decide("right")}>
+        <button type="button" disabled={left === 0} className="press press-green flex-1 disabled:opacity-50" onClick={() => decide("right")}>
           Cheers
         </button>
       </div>

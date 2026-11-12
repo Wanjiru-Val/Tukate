@@ -37,7 +37,16 @@ Party cup concepts on the canvas:
 
 Earlier pin concepts (superseded by the red cup reference): pin + green cup, pin + shots, literal flag-stripe cup (trademark risk), remix-stripe cup pin.
 
+## Monetisation (decided 12 Nov 2026)
+- **Free:** 3 swipes a day, on people in the area you are in. No filters.
+- **Paid:** KES 299 per month. Lets people choose who they see: same drink (e.g. whisky drinkers only), same drinking type, same party style.
+- Working name for the paid tier on the website: "Tukate Plus" (not final).
+- Assumed, to confirm: paid has no daily swipe limit; chat and meetups are the same on both tiers.
+- Needs building in the app: daily swipe counter, drink / drinking type / party style on profiles, filters, payments (M-PESA and card).
+
 ## Open items
+- Choose the paid tier's real name
+- Confirm what paid includes beyond filters (swipe limit, anything else)
 - Choose the final party cup concept
 - Check domains, social handles and Kenyan trademarks for "Tukate"
 - Test the name with 10–15 people in the target group

@@ -113,12 +113,30 @@ export const rules = [
   },
 ];
 
+// What is free and what is paid. Shown as a bar tab on the homepage.
+export const freeTab = [
+  "Three swipes a day",
+  "People in the area you are in",
+  "Chat with every match",
+  "The house rules, always",
+];
+export const plusTab = [
+  "Swipe as much as you like",
+  "See only people with your Kinywaji",
+  "Filter by drinking type",
+  "Filter by party style",
+];
+
 export type Question = { q: string; a: string };
 
 export const counterQuestions: Question[] = [
   {
     q: "So is this a dating app?",
     a: "No. Profiles are about where you hang out and what you drink, and everything is set up around meeting in public for a round. Friends, not dates. Nobody is going to ask what you are looking for.",
+  },
+  {
+    q: "Is it free?",
+    a: "Yes, with limits. Free gets you three swipes a day on people in your area. Tukate Plus is KES 299 a month and lets you choose who you see: same drink, same drinking type, same party style.",
   },
   {
     q: "Where does it work?",
