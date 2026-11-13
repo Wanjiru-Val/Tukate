@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { nav, site } from "@/lib/site";
+import { legalNav, nav, site } from "@/lib/site";
 
 export function Footer() {
   return (
@@ -22,6 +22,13 @@ export function Footer() {
             <Link href="/download" className="hover:text-mango">
               Get the app
             </Link>
+          </nav>
+          <nav aria-label="Legal" className="flex flex-col gap-2 text-lg">
+            {legalNav.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-mango">
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
         <p className="max-w-3xl border-l-4 border-pilipili pl-5 text-cream/85">

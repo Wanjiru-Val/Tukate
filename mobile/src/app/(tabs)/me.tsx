@@ -2,12 +2,13 @@ import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { backend } from "@/lib/backend";
 import { DRINKING_TYPES, PARTY_STYLES, labelOf } from "@/lib/options";
 import { isPlus, useSession } from "@/lib/session";
 import { colors, fonts, plan } from "@/lib/theme";
 import { friendly } from "@/lib/types";
+import { usePhoto } from "@/lib/usePhoto";
 import { Drink, Pattern } from "@/ui/art";
 import { Body, Hand, Head, Notice, Press, Screen } from "@/ui/kit";
 import { ProfileForm, draftComplete, type ProfileDraft } from "@/ui/ProfileForm";
@@ -19,9 +20,19 @@ export default function Me() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const photo = usePhoto(profile?.photo_path);
   if (!profile) return null;
   const plus = isPlus(profile);
-  const photo = backend.photoUrl(profile.photo_path);
+
+  async function exportData() {
+    setError("");
+    try {
+      const data = await backend.exportMyData();
+      await Share.share({ title: "My Tukate data", message: JSON.stringify(data, null, 2) });
+    } catch (e) {
+      setError(friendly(e));
+    }
+  }
 
   function startEdit() {
     if (!profile) return;
@@ -109,6 +120,8 @@ export default function Me() {
         </View>
 
         <Press title="House rules and safety" color="cream" onPress={() => router.push("/safety")} />
+        <Press title="Privacy and your data" color="cream" onPress={() => router.push("/legal")} />
+        <Press title="Download my data" color="cream" onPress={exportData} />
         <Press title="Sign out" color="cream" onPress={() => backend.signOut()} />
 
         {confirmDelete ? (

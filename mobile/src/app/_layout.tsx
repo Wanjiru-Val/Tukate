@@ -23,6 +23,7 @@ function Guard() {
   useEffect(() => {
     if (!ready) return;
     const isPublic = first === "welcome" || first === "sign-in";
+    if (first === "legal") return; // readable signed in or out
     if (!userId) {
       if (!isPublic) router.replace("/welcome");
     } else if (!profile) {
@@ -47,10 +48,13 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <SessionProvider>
         <StatusBar style="dark" />
-        <View style={{ flex: 1, backgroundColor: colors.cream }}>
+        {/* On a wide screen (the web app on a laptop) the app sits in a phone-width column. */}
+        <View style={{ flex: 1, backgroundColor: colors.usiku }}>
+        <View style={{ flex: 1, backgroundColor: colors.cream, width: "100%", maxWidth: 480, alignSelf: "center" }}>
           {backend.mode === "demo" ? <DemoBanner /> : null}
           <Guard />
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.cream } }} />
+        </View>
         </View>
       </SessionProvider>
     </SafeAreaProvider>

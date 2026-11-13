@@ -32,7 +32,12 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
-      "output": "single"
+      "output": "single",
+      "name": "Tukate",
+      "shortName": "Tukate",
+      "themeColor": "#121018",
+      "backgroundColor": "#FFF8EE",
+      "description": "Find someone nearby to have a drink with. Friends, not dates. 18+ only."
     },
     "plugins": [
       "expo-router",
@@ -48,7 +53,8 @@
         {
           "photosPermission": "Tukate needs your photos so you can choose a profile picture."
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": false

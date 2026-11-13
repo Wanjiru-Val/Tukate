@@ -16,6 +16,8 @@ export type Profile = {
 };
 
 export type NewProfile = Omit<Profile, "id" | "plan" | "plan_until">;
+// Shown at sign-up; bump when the terms or privacy policy change.
+export const TERMS_VERSION = "2026-11";
 export type ProfilePatch = Partial<Omit<NewProfile, "birth_date">>;
 
 export type Card = {
@@ -59,7 +61,7 @@ export type ReportReason = "harassment" | "fake_profile" | "underage" | "unsafe_
 // Error codes the database raises, turned into something a person can read.
 export type ErrorCode =
   | "daily_limit" | "plus_required" | "already_swiped" | "not_signed_in" | "no_profile"
-  | "no_such_person" | "under_18" | "bad_code" | "network" | "unknown";
+  | "no_such_person" | "under_18" | "bad_code" | "slow_down" | "network" | "unknown";
 
 export class AppError extends Error {
   code: ErrorCode;
@@ -75,6 +77,7 @@ export function friendly(e: unknown): string {
     case "daily_limit": return "That was your last free swipe for today. Kesho tena.";
     case "plus_required": return "Filters are part of Tukate Plus.";
     case "already_swiped": return "You have already swiped on this person.";
+    case "slow_down": return "You are going a bit fast. Give it a minute and try again.";
     case "under_18": return "Tukate is only for people aged 18 and over.";
     case "bad_code": return "That code is not right, or it has expired. Ask for a new one.";
     case "network": return "We could not reach Tukate. Check your connection and try again.";
@@ -96,7 +99,8 @@ export interface Backend {
   createProfile(input: NewProfile): Promise<Profile>;
   updateProfile(patch: ProfilePatch): Promise<Profile>;
   uploadPhoto(localUri: string): Promise<string>;
-  photoUrl(path: string | null): string | null;
+  // A short-lived link to a private photo, or null if there is none.
+  getPhotoUrl(path: string | null): Promise<string | null>;
   setLocation(lat: number, lng: number): Promise<void>;
 
   swipesLeft(): Promise<number | null>;
@@ -111,6 +115,8 @@ export interface Backend {
   blockUser(userId: string): Promise<void>;
   reportUser(userId: string, reason: ReportReason, details: string): Promise<void>;
   deleteAccount(): Promise<void>;
+  // Everything Tukate holds about the signed-in person.
+  exportMyData(): Promise<unknown>;
 
   // Demo mode only: flips the made-up account to Plus so the paid features can be tried.
   demoSetPlan?(plan: Plan): Promise<void>;

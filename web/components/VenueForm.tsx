@@ -46,7 +46,7 @@ export function VenueForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-5 rounded-xl border-2 border-usiku bg-mango p-6 shadow-[8px_8px_0_var(--color-usiku)] sm:p-8">
+    <form onSubmit={onSubmit} className="relative flex flex-col gap-5 rounded-xl border-2 border-usiku bg-mango p-6 shadow-[8px_8px_0_var(--color-usiku)] sm:p-8">
       <label className={label} htmlFor="venue-name">
         What is the place called?
         <input id="venue-name" name="venue" required maxLength={120} className={field} />
@@ -63,6 +63,11 @@ export function VenueForm() {
         A number we can reach you on
         <input id="venue-phone" name="phone" type="tel" required maxLength={20} inputMode="tel" className={field} placeholder="+254 7XX XXX XXX" />
       </label>
+      {/* Hidden from people; bots fill it in, and the server drops anything that does. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="venue-website">Website</label>
+        <input id="venue-website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
       <label className={label} htmlFor="venue-notes">
         Anything we should know? (optional)
         <textarea id="venue-notes" name="notes" rows={3} maxLength={1000} className={field} />
@@ -72,6 +77,13 @@ export function VenueForm() {
           {error}
         </p>
       ) : null}
+      <p className="text-sm">
+        We use these details only to contact you about listing your venue. See our{" "}
+        <a href="/privacy" className="link-tk">
+          privacy policy
+        </a>
+        .
+      </p>
       <button type="submit" disabled={status === "sending"} className="press press-green self-start disabled:opacity-60">
         {status === "sending" ? "Sending…" : "Send it over"}
       </button>

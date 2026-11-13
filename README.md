@@ -8,6 +8,7 @@ Swipe to find someone nearby to drink and hang out with. Friends, not dates. 18+
 | `mobile/` | The phone app for iPhone and Android (Expo / React Native). |
 | `supabase/` | The app's database: tables, security rules and tests. |
 | `docs/` | Brand decisions, including the free and paid tiers. |
+| `SECURITY.md` | How people's data is protected, and what must be done before launch. |
 
 ## The app in one paragraph
 
@@ -32,8 +33,8 @@ Scan the QR code with the Expo Go app on your phone, or press `w` to open it in 
 ## Connect the real database
 
 1. Create a project at supabase.com.
-2. In the project's SQL Editor, run `supabase/migrations/0001_core.sql`, then
-   `supabase/migrations/0002_photos.sql`.
+2. In the project's SQL Editor, run the three files in `supabase/migrations/` in order
+   (`0001`, `0002`, `0003`).
 3. Authentication -> Email Templates -> Magic Link: make the email show the code by
    including `{{ .Token }}` in the template, for example `Your Tukate code is {{ .Token }}`.
 4. Copy `mobile/.env.example` to `mobile/.env` and paste in the Project URL and the
@@ -48,10 +49,23 @@ update public.profiles set plan = 'plus', plan_until = now() + interval '30 days
 where id = '<user id>';
 ```
 
+## The web app
+
+The phone app also runs in a browser. `cd mobile && npx expo export --platform web`
+builds it into `mobile/dist`, and `mobile/vercel.json` is ready for hosting it on Vercel
+(set the project's root directory to `mobile`). Set `NEXT_PUBLIC_WEB_APP_URL` on the
+website to show an "Open the web app" button.
+
+## Hosting the website
+
+Deploy `web/` (root directory `web`). Settings are listed in `web/.env.example`. The venue
+form needs `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`; without them it tells the
+visitor it cannot take enquiries yet.
+
 ## Testing
 
 - Database rules: `PGURL=postgres://postgres@localhost:5432/postgres supabase/tests/run.sh`
-  runs 47 checks on a throwaway local Postgres database (age limit, daily swipe limit,
+  runs 54 checks on a throwaway local Postgres database (age limit, daily swipe limit,
   Plus-only filters, privacy, matching, blocking, account deletion).
 - App: `cd mobile && npm run typecheck`.
 

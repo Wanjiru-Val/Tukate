@@ -1,11 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { sessionStorage } from "./secureStorage";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import {
   AppError, type Backend, type Card, type ErrorCode, type MatchRow, type Message, type Profile,
 } from "./types";
 
 const KNOWN: ErrorCode[] = [
-  "daily_limit", "plus_required", "already_swiped", "not_signed_in", "no_profile", "no_such_person",
+  "daily_limit", "plus_required", "already_swiped", "not_signed_in", "no_profile", "no_such_person", "slow_down",
 ];
 
 function toAppError(error: { message?: string; code?: string } | null): AppError {
@@ -27,8 +27,10 @@ const PROFILE_COLS =
 
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
   const db: SupabaseClient = createClient(url, anonKey, {
-    auth: { storage: AsyncStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false },
+    auth: { storage: sessionStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false },
   });
+
+  const signed = new Map<string, { url: string; until: number }>();
 
   async function uid(): Promise<string> {
     const { data } = await db.auth.getSession();
@@ -67,7 +69,8 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async createProfile(input) {
       const id = await uid();
-      const res = await db.from("profiles").insert({ id, ...input }).select(PROFILE_COLS).single();
+      const res = await db.from("profiles")
+        .insert({ id, accepted_terms_at: new Date().toISOString(), ...input }).select(PROFILE_COLS).single();
       return must(res) as Profile;
     },
     async updateProfile(patch) {
@@ -83,9 +86,14 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       if (error) throw toAppError(error);
       return path;
     },
-    photoUrl(path) {
+    async getPhotoUrl(path) {
       if (!path) return null;
-      return db.storage.from("photos").getPublicUrl(path).data.publicUrl;
+      const hit = signed.get(path);
+      if (hit && hit.until > Date.now()) return hit.url;
+      const { data, error } = await db.storage.from("photos").createSignedUrl(path, 3600);
+      if (error || !data) return null;
+      signed.set(path, { url: data.signedUrl, until: Date.now() + 50 * 60 * 1000 });
+      return data.signedUrl;
     },
     async setLocation(lat, lng) {
       const id = await uid();
@@ -141,6 +149,9 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     async deleteAccount() {
       must(await db.rpc("delete_my_account"));
       await db.auth.signOut();
+    },
+    async exportMyData() {
+      return must(await db.rpc("export_my_data"));
     },
   };
 }

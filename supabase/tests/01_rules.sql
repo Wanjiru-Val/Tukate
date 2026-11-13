@@ -38,38 +38,38 @@ set role authenticated;
 
 -- 1: Val, whisky, Kilimani
 select pg_temp.login(1);
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-values (auth.uid(), 'Val', '1998-03-01', 'Kilimani', 'Whisky, no ice', 'whisky', 'social', 'rooftop');
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+values (auth.uid(), now(), 'Val', '1998-03-01', 'Kilimani', 'Whisky, no ice', 'whisky', 'social', 'rooftop');
 
 select pg_temp.expect_error($$
-  insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-  values ('00000000-0000-0000-0000-000000000002', 'Imposter', '1990-01-01', 'CBD', 'Beer', 'beer', 'social', 'club')
+  insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+  values ('00000000-0000-0000-0000-000000000002', now(), 'Imposter', '1990-01-01', 'CBD', 'Beer', 'beer', 'social', 'club')
 $$, 'row-level security', 'cannot create a profile for someone else');
 
 select pg_temp.login(2);
 select pg_temp.expect_error($$
-  insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-  values (auth.uid(), 'Kid', (current_date - interval '17 years')::date, 'CBD', 'Soda', 'no_alcohol', 'one_or_two', 'quiet_local')
+  insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+  values (auth.uid(), now(), 'Kid', (current_date - interval '17 years')::date, 'CBD', 'Soda', 'no_alcohol', 'one_or_two', 'quiet_local')
 $$, 'adults_only', 'under 18 is refused');
 select pg_temp.expect_error($$
-  insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style, plan)
-  values (auth.uid(), 'Freeloader', '1995-01-01', 'CBD', 'Beer', 'beer', 'social', 'club', 'plus')
+  insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style, plan)
+  values (auth.uid(), now(), 'Freeloader', '1995-01-01', 'CBD', 'Beer', 'beer', 'social', 'club', 'plus')
 $$, 'permission denied', 'cannot sign up straight to Plus');
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-values (auth.uid(), 'Otieno', '1996-06-10', 'Westlands', 'Lager, baridi', 'beer', 'all_night', 'club');
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+values (auth.uid(), now(), 'Otieno', '1996-06-10', 'Westlands', 'Lager, baridi', 'beer', 'all_night', 'club');
 
 select pg_temp.login(3);
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style, lat, lng)
-values (auth.uid(), 'Wanjiku', '2000-01-15', 'Kilimani', 'Single malt', 'whisky', 'social', 'rooftop', -1.2925, 36.7860);
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style, lat, lng)
+values (auth.uid(), now(), 'Wanjiku', '2000-01-15', 'Kilimani', 'Single malt', 'whisky', 'social', 'rooftop', -1.2925, 36.7860);
 select pg_temp.login(4);
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-values (auth.uid(), 'Amina', '2001-09-09', 'South B', 'Dawa', 'cocktails', 'one_or_two', 'live_music');
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+values (auth.uid(), now(), 'Amina', '2001-09-09', 'South B', 'Dawa', 'cocktails', 'one_or_two', 'live_music');
 select pg_temp.login(5);
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-values (auth.uid(), 'Brayo', '1994-12-01', 'Kileleshwa', 'Whisky and coke', 'whisky', 'all_night', 'house_party');
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+values (auth.uid(), now(), 'Brayo', '1994-12-01', 'Kileleshwa', 'Whisky and coke', 'whisky', 'all_night', 'house_party');
 select pg_temp.login(6);
-insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
-values (auth.uid(), 'Shiko', '1999-05-05', 'Karen', 'Gin and tonic', 'gin', 'social', 'nyama_choma');
+insert into profiles (id, accepted_terms_at, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+values (auth.uid(), now(), 'Shiko', '1999-05-05', 'Karen', 'Gin and tonic', 'gin', 'social', 'nyama_choma');
 
 -- privacy
 select pg_temp.login(1);
@@ -176,4 +176,27 @@ select delete_my_account();
 reset role;
 select pg_temp.check_true(not exists (select 1 from profiles where display_name = 'Otieno'), 'deleting an account removes the profile');
 select pg_temp.check_true(not exists (select 1 from swipes where target = '00000000-0000-0000-0000-000000000002'), 'and the swipes on it');
+
+-- consent, export, limits (0003)
+set role authenticated;
+select pg_temp.login(4);
+select pg_temp.check_true((export_my_data() -> 'profile' ->> 'display_name') = 'Amina', 'I can export my own data');
+select pg_temp.check_true(export_my_data()::text not like '%Wanjiku%', 'my export contains nobody else''s profile');
+select pg_temp.expect_error($$ select * from venue_enquiries $$, 'permission denied', 'app users cannot read venue enquiries');
+select pg_temp.expect_error($$ insert into venue_enquiries (venue, area, contact, phone) values ('x','y','z','0700000000') $$, 'permission denied', 'app users cannot write venue enquiries');
+select pg_temp.expect_error($$ select report_user(auth.uid(), 'other', '') $$, 'cannot_report_self', 'cannot report myself');
+-- a match to chat in: Amina and Brayo
+select swipe('00000000-0000-0000-0000-000000000005', 'cheers');
+reset role;
+insert into swipes (swiper, target, direction) values ('00000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000004', 'cheers');
+insert into matches (user_a, user_b) values ('00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000006');
+set role authenticated;
+select pg_temp.login(4);
+insert into messages (match_id, sender, body) select m.id, auth.uid(), 'msg ' || g from matches m, generate_series(1, 20) g where auth.uid() in (m.user_a, m.user_b) limit 20;
+select pg_temp.expect_error($$ insert into messages (match_id, sender, body) select id, auth.uid(), 'one too many' from matches limit 1 $$, 'slow_down', '21st message in a minute is refused');
+reset role;
+select pg_temp.expect_error($$ insert into auth.users (id) values ('00000000-0000-0000-0000-000000000009');
+  insert into profiles (id, display_name, birth_date, base, kinywaji, drink_type, drinking_type, party_style)
+  values ('00000000-0000-0000-0000-000000000009', 'NoConsent', '1990-01-01', 'CBD', 'Beer', 'beer', 'social', 'club') $$,
+  'accepted_terms_at', 'a profile cannot exist without accepting the terms');
 \echo ALL RULES PASSED

@@ -26,6 +26,11 @@ export function StoreButtons() {
     <div className="flex flex-wrap gap-4">
       <StoreButton url={site.appStoreUrl} store="App Store" />
       <StoreButton url={site.playStoreUrl} store="Google Play" />
+      {site.webAppUrl ? (
+        <a href={site.webAppUrl} className="press press-green">
+          Open the web app
+        </a>
+      ) : null}
     </div>
   );
 }

@@ -71,7 +71,7 @@ export function createDemoBackend(): Backend {
       return profile;
     },
     async uploadPhoto(localUri) { return localUri; },
-    photoUrl(path) { return path; },
+    async getPhotoUrl(path) { return path; },
     async setLocation() {},
 
     async swipesLeft() { return left(); },
@@ -140,6 +140,9 @@ export function createDemoBackend(): Backend {
     async deleteAccount() {
       profile = null; signedIn = false; swiped.clear(); matches.length = 0; messages.length = 0; swipedToday = 0;
       authListeners.forEach((cb) => cb(null));
+    },
+    async exportMyData() {
+      return { exported_at: new Date().toISOString(), profile, note: "Demo mode: nothing is stored anywhere." };
     },
     async demoSetPlan(p: Plan) {
       if (profile) profile = { ...profile, plan: p };

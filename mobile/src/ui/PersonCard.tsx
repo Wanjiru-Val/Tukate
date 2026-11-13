@@ -1,13 +1,13 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
-import { backend } from "@/lib/backend";
+import { usePhoto } from "@/lib/usePhoto";
 import { DRINKING_TYPES, PARTY_STYLES, distanceText, labelOf } from "@/lib/options";
 import { colors, fonts } from "@/lib/theme";
 import type { Card } from "@/lib/types";
 import { Drink, Pattern } from "./art";
 
 export function PersonCard({ card }: { card: Card }) {
-  const photo = backend.photoUrl(card.photo_path);
+  const photo = usePhoto(card.photo_path);
   return (
     <View style={s.card} accessible accessibilityLabel={`${card.display_name}, ${card.age}. Base ${card.base}. Kinywaji ${card.kinywaji}. ${card.bio}`}>
       <Pattern seed={card.id} style={s.top}>
