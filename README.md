@@ -9,6 +9,7 @@ Swipe to find someone nearby to drink and hang out with. Friends, not dates. 18+
 | `supabase/` | The app's database: tables, security rules and tests. |
 | `docs/` | Brand decisions, including the free and paid tiers. |
 | `SECURITY.md` | How people's data is protected, and what must be done before launch. |
+| `docs/project-report.md` | Full project report as of 13 November 2026. |
 
 ## The app in one paragraph
 
